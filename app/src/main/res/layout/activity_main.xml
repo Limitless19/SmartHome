@@ -19,6 +19,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
+            android:id="@+id/fanImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO" />
@@ -33,6 +34,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
+            android:id="@+id/bulbImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO" />
@@ -47,6 +49,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
+            android:id="@+id/televisionImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO" />
@@ -60,6 +63,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
+            android:id="@+id/fridgeImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO" />
@@ -73,6 +77,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
+            android:id="@+id/pumpImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="TODO" />
@@ -85,6 +90,7 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Tap the button and speak the commands."
@@ -92,6 +98,7 @@
         />
 
     <Button
+        android:id="@+id/speechButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
