@@ -31,6 +31,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -108,51 +109,64 @@ limitlessSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
     @Override
     public void onResults(Bundle results) {
             //getting array of words.
+        try{
         ArrayList<String> wordsList =results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         //displaying the first 2 words of the array.Those ones are the necessary ones.
         if(wordsList != null){
             editText.setText(wordsList.get(0));
-
             //TODO Use this first two words with the api.
             String postReceiverUrl = "";
             if(wordsList.get(0).contains("on") && !wordsList.get(0).contains("off")){
-                if(wordsList.contains("fan")){
+                if(wordsList.get(0).contains("fan")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&fan";
+                    Toast.makeText(getApplicationContext(),"Command fan sent",Toast.LENGTH_SHORT).show();
 
-                }else if(wordsList.contains("pump")){
+                }else if(wordsList.get(0).contains("pump")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&pump";
-
-                }else if(wordsList.get(0).contains("television") || wordsList.get(0).contains("tv") ){
+                    Toast.makeText(getApplicationContext(),"Command pump sent",Toast.LENGTH_SHORT).show();
+                }else if(wordsList.get(0).contains("television") || wordsList.get(0).contains("TV") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&tv";
-                }else if(wordsList.contains("bulb") || wordsList.contains("light") ){
+                     wordsList.clear();
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                }else if(wordsList.get(0).contains("bulb") || wordsList.get(0).contains("light") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&bulb";
                 }else if(wordsList.get(0).contains("fridge") || wordsList.get(0).contains("freezer") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&fridge";
                     Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
                 }
 
-            }else if(wordsList.contains("off") && !wordsList.contains("on")){
-                if(wordsList.contains("fan")){
+            }else if(wordsList.get(0).contains("off") && !wordsList.get(0).contains("on")){
+                if(wordsList.get(0).contains("fan")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&fan";
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
 
-                }else if(wordsList.contains("pump")){
+                }else if(wordsList.get(0).contains("pump")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&pump";
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
 
-                }else if(wordsList.contains("television") || wordsList.contains("tv") ){
+                }else if(wordsList.get(0).contains("television") || wordsList.get(0).contains("TV") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&tv";
-                }else if(wordsList.contains("bulb") || wordsList.contains("light") ){
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                }else if(wordsList.get(0).contains("bulb") || wordsList.get(0).contains("light") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&bulb";
-                }else if(wordsList.contains("fridge") || wordsList.contains("freezer") ){
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                }else if(wordsList.get(0).contains("fridge") || wordsList.get(0).contains("freezer") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&fridge";
+                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
                 }
-            }else if(wordsList.contains("off") && wordsList.contains("on")){
-                Toast.makeText(getApplicationContext(),"Cannot put device on and off at the same time",Toast.LENGTH_SHORT).show();
+            }else if(wordsList.get(0).contains("off") && wordsList.get(0).contains("on")){
+                Toast.makeText(getApplicationContext(),"Cannot put device on and off at the same time,retry",Toast.LENGTH_SHORT).show();
+               //TODO FIX THIS
+                wordsList.get(0).replace("off","h");
             }
             else{
                 Toast.makeText(getApplicationContext(),"No on or off command",Toast.LENGTH_SHORT).show();
             }
             useUrl(postReceiverUrl);
-        }
+        }}catch(Exception e)
+
+    {
+    }
     }
 
     @Override
@@ -200,6 +214,7 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
     }
 
     private void useUrl(String postReceiverUrl){
+
         try{
             Log.v(TAG, "postURL: " + postReceiverUrl);
             // HttpClient
@@ -211,14 +226,22 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
             // execute HTTP post request
             HttpResponse response = httpClient.execute(httpPost);
 
+            HttpEntity resEntity = response.getEntity();
+
+
+            if (resEntity != null) {
+
+                String responseStr = EntityUtils.toString(resEntity).trim();
+                Log.v(TAG, "Response: " +  responseStr);
+                //  textView.setText(responseStr);
+
+                // you can add an if statement here and do other actions based on the response
+            }
+
         }catch(Exception e){
             e.printStackTrace();
         }
 
     }
-
-
-
-
 
 }
