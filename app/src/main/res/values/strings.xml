@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SmartHome</string>
+    <string name="appliances">Appliances</string>
+    <string name="status">Status</string>
+    <string name="click_here">Hold here</string>
+    <string name="tap_the_button_and_speak_the_commands">Hold the button and speak the command.</string>
 </resources>

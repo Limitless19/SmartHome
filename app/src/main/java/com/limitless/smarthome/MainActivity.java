@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -41,7 +42,6 @@ import java.util.Locale;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
-    ImageButton fanImageButton,bulbImageButton,televisionImageButton,fridgeImageButton,pumpImageButton;
     EditText editText;
     Button speechButton;
 
@@ -50,13 +50,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        fanImageButton = findViewById(R.id.fanImageButton);
-        bulbImageButton = findViewById(R.id.bulbImageButton);
-        televisionImageButton = findViewById(R.id.televisionImageButton);
-        fridgeImageButton = findViewById(R.id.fridgeImageButton);
-        pumpImageButton = findViewById(R.id.pumpImageButton);
+
         editText = findViewById(R.id.editText);
         speechButton = findViewById(R.id.speechButton);
 
@@ -119,40 +116,40 @@ limitlessSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             if(wordsList.get(0).contains("on") && !wordsList.get(0).contains("off")){
                 if(wordsList.get(0).contains("fan")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&fan";
-                    Toast.makeText(getApplicationContext(),"Command fan sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put fan on sent",Toast.LENGTH_LONG).show();
 
                 }else if(wordsList.get(0).contains("pump")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&pump";
-                    Toast.makeText(getApplicationContext(),"Command pump sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put pump on sent",Toast.LENGTH_LONG).show();
                 }else if(wordsList.get(0).contains("television") || wordsList.get(0).contains("TV") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&tv";
                      wordsList.clear();
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put Tv on sent",Toast.LENGTH_LONG).show();
                 }else if(wordsList.get(0).contains("bulb") || wordsList.get(0).contains("light") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&bulb";
                 }else if(wordsList.get(0).contains("fridge") || wordsList.get(0).contains("freezer") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/on&fridge";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put fridge on sent",Toast.LENGTH_LONG).show();
                 }
 
             }else if(wordsList.get(0).contains("off") && !wordsList.get(0).contains("on")){
                 if(wordsList.get(0).contains("fan")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&fan";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put fan off sent",Toast.LENGTH_LONG).show();
 
                 }else if(wordsList.get(0).contains("pump")){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&pump";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put pump off sent",Toast.LENGTH_LONG).show();
 
                 }else if(wordsList.get(0).contains("television") || wordsList.get(0).contains("TV") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&tv";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put television off sent",Toast.LENGTH_LONG).show();
                 }else if(wordsList.get(0).contains("bulb") || wordsList.get(0).contains("light") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&bulb";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put bulb off sent",Toast.LENGTH_LONG).show();
                 }else if(wordsList.get(0).contains("fridge") || wordsList.get(0).contains("freezer") ){
                      postReceiverUrl = "https://appliance-modifier.herokuapp.com/off&fridge";
-                    Toast.makeText(getApplicationContext(),"Command sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Command to put freezer off sent",Toast.LENGTH_LONG).show();
                 }
             }else if(wordsList.get(0).contains("off") && wordsList.get(0).contains("on")){
                 Toast.makeText(getApplicationContext(),"Cannot put device on and off at the same time,retry",Toast.LENGTH_SHORT).show();
