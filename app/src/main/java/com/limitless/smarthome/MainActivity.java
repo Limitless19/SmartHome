@@ -22,8 +22,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,7 +35,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -44,7 +48,14 @@ import static android.content.ContentValues.TAG;
 public class MainActivity extends AppCompatActivity {
     EditText editText;
     Button speechButton;
+    TextView fanText,bulbText,tvText,fridgeText,pumpText;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        useUrl("https://appliance-modifier.herokuapp.com");
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -56,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editText);
         speechButton = findViewById(R.id.speechButton);
-
+        fanText = findViewById(R.id.fanText);
+        bulbText = findViewById(R.id.bulbText);
+        tvText = findViewById(R.id.tvText);
+        fridgeText = findViewById(R.id.fridgeText);
+        pumpText = findViewById(R.id.pumpText);
 
         final SpeechRecognizer limitlessSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -153,8 +168,7 @@ limitlessSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
                 }
             }else if(wordsList.get(0).contains("off") && wordsList.get(0).contains("on")){
                 Toast.makeText(getApplicationContext(),"Cannot put device on and off at the same time,retry",Toast.LENGTH_SHORT).show();
-               //TODO FIX THIS
-                wordsList.get(0).replace("off","h");
+
             }
             else{
                 Toast.makeText(getApplicationContext(),"No on or off command",Toast.LENGTH_SHORT).show();
@@ -163,6 +177,7 @@ limitlessSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
         }}catch(Exception e)
 
     {
+        e.printStackTrace();
     }
     }
 
@@ -183,7 +198,7 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 limitlessSpeechRecognizer.stopListening();
-                editText.setHint("You will see input here");
+                editText.setHint("Processing...");
                 break;
 
             case MotionEvent.ACTION_DOWN:
@@ -210,6 +225,57 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
         }
     }
 
+    private void updateUI(int fan,int bulb,int tv,int fridge,int pump){
+        switch (fan){
+            case 1:
+                fanText.setText("ON");
+                break;
+            case 0:
+                fanText.setText("OFF");
+                break;
+            default:
+                break;
+        }
+        switch (bulb){
+            case 1:
+                bulbText.setText("ON");
+                break;
+            case 0:
+                bulbText.setText("OFF");
+                break;
+            default:
+                break;
+        }  switch (fridge){
+            case 1:
+                fridgeText.setText("ON");
+                break;
+            case 0:
+                fridgeText.setText("OFF");
+                break;
+            default:
+                break;
+        }  switch (pump){
+            case 1:
+                pumpText.setText("ON");
+                break;
+            case 0:
+                pumpText.setText("OFF");
+                break;
+            default:
+                break;
+        }  switch (tv){
+            case 1:
+                tvText.setText("ON");
+                break;
+            case 0:
+                tvText.setText("OFF");
+                break;
+            default:
+                break;
+        }
+    }
+
+
     private void useUrl(String postReceiverUrl){
 
         try{
@@ -223,6 +289,7 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
             // execute HTTP post request
             HttpResponse response = httpClient.execute(httpPost);
 
+
             HttpEntity resEntity = response.getEntity();
 
 
@@ -230,7 +297,22 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
 
                 String responseStr = EntityUtils.toString(resEntity).trim();
                 Log.v(TAG, "Response: " +  responseStr);
-                //  textView.setText(responseStr);
+
+                JSONObject object = new JSONObject(responseStr);
+                String data = object.getString("data");
+                JSONObject object2 = new JSONObject(data);
+
+                int bulb = object2.getInt("bulb");
+                int fan = object2.getInt("fan");
+                int fridge = object2.getInt("fridge");
+                int pump = object2.getInt("pump");
+                int tv = object2.getInt("tv");
+                Log.v(TAG, "tv: " +  tv);
+
+                //TODO UnderConstruction
+                updateUI(fan, bulb, tv, fridge, pump);
+                //TODO UnderConstruction
+
 
                 // you can add an if statement here and do other actions based on the response
             }

@@ -40,7 +40,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dip"
-        android:background="#B3B2B0"
+        android:background="#e1d816"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -71,11 +71,13 @@
             android:layout_width="70dp"
             android:layout_height="0dp"/>
         <TextView
+            android:id="@+id/fanText"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="OFF" />
+            android:text="OFF"
+            />
     </LinearLayout>
 
 
@@ -95,6 +97,7 @@
               android:layout_width="70dp"
               android:layout_height="0dp"/>
           <TextView
+              android:id="@+id/bulbText"
               android:layout_width="60dp"
               android:layout_height="40dp"
               android:layout_gravity="center"
@@ -118,6 +121,7 @@
             android:layout_width="70dp"
             android:layout_height="0dp"/>
         <TextView
+            android:id="@+id/tvText"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -140,6 +144,7 @@
             android:layout_width="70dp"
             android:layout_height="0dp"/>
         <TextView
+            android:id="@+id/fridgeText"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -164,6 +169,7 @@
             android:layout_height="0dp"/>
 
         <TextView
+            android:id="@+id/pumpText"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -192,8 +198,10 @@
         android:id="@+id/speechButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/shape"
         android:layout_marginTop="12dp"
         android:text="@string/click_here"
+        android:textColor="#000000"
         />
 
 </LinearLayout>
