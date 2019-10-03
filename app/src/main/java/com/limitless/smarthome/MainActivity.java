@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -49,12 +50,34 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     Button speechButton;
     TextView fanText,bulbText,tvText,fridgeText,pumpText;
+    int bulb, fan, fridge, pump, tv;
+    public static final String MY_PREFS_NAME = "MyPrefs";
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        useUrl("https://appliance-modifier.herokuapp.com");
+        SharedPreferences prefs = getSharedPreferences("My Prefs", MODE_PRIVATE);
+        bulb = prefs.getInt("bulb",0);
+        fan = prefs.getInt("fan",0);
+        fridge = prefs.getInt("fridge",0);
+        pump = prefs.getInt("pump",0);
+        tv = prefs.getInt("tv",0);
+
+        updateUI(fan,bulb,tv,fridge,pump);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences prefs = getSharedPreferences("My Prefs", MODE_PRIVATE);
+        bulb = prefs.getInt("bulb",0);
+        fan = prefs.getInt("fan",0);
+        fridge = prefs.getInt("fridge",0);
+        pump = prefs.getInt("pump",0);
+        tv = prefs.getInt("tv",0);
+
+        updateUI(fan,bulb,tv,fridge,pump);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         tvText = findViewById(R.id.tvText);
         fridgeText = findViewById(R.id.fridgeText);
         pumpText = findViewById(R.id.pumpText);
+
+
 
         final SpeechRecognizer limitlessSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -225,7 +250,7 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
         }
     }
 
-    private void updateUI(int fan,int bulb,int tv,int fridge,int pump){
+    public void updateUI(int fan,int bulb,int tv,int fridge,int pump){
         switch (fan){
             case 1:
                 fanText.setText("ON");
@@ -302,17 +327,23 @@ speechButton.setOnTouchListener(new View.OnTouchListener() {
                 String data = object.getString("data");
                 JSONObject object2 = new JSONObject(data);
 
-                int bulb = object2.getInt("bulb");
-                int fan = object2.getInt("fan");
-                int fridge = object2.getInt("fridge");
-                int pump = object2.getInt("pump");
-                int tv = object2.getInt("tv");
-                Log.v(TAG, "tv: " +  tv);
+                 bulb = object2.getInt("bulb");
+                 fan = object2.getInt("fan");
+                 fridge = object2.getInt("fridge");
+                 pump = object2.getInt("pump");
+                 tv = object2.getInt("tv");
 
+                SharedPreferences prefs = getSharedPreferences("My Prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                //TODO UnderConstruction
+                    editor.putInt("bulb", bulb);
+                    editor.putInt("fan", fan);
+                    editor.putInt("fridge", fridge);
+                    editor.putInt("pump", pump);
+                    editor.putInt("tv", tv);
+                    editor.apply();
                 //TODO UnderConstruction
                 updateUI(fan, bulb, tv, fridge, pump);
-                //TODO UnderConstruction
-
 
                 // you can add an if statement here and do other actions based on the response
             }
